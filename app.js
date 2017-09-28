@@ -18,6 +18,6 @@ app.post('/thread', api.create);
 app.get('/thread/:title.:format?', api.show);
 app.get('/thread', api.list);
 
-var server = app.listen(process.env.PORT || 3000, function() {
+var server = app.listen(process.env.PORT || 3001, function() {
     console.log("Express server listening on port %d", server.address().port);
 });
