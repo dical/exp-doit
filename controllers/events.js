@@ -2,12 +2,10 @@ var User = require('../models/user.js');
 
 exports.create = function(req, res) {
     new User({
-        username: req.body.title,
+        name: req.body.title,
         password: req.body.author
     })
         .save(function(error, user) {
-            if (error) res.json(error);
-
             res.json(user)
         })
 };
