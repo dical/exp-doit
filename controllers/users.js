@@ -1,11 +1,7 @@
 var User = require('../models/user.js');
 
 exports.create = function(req, res) {
-    new User({
-        username: req.body.title,
-        password: req.body.author
-    })
-        .save(function(error, user) {
+    new User(req.body.data.attributes).save(function(error, user) {
             if (error) res.json(error);
 
             res.json(user)
@@ -30,10 +26,18 @@ exports.replace = function(req, res) {
     })
 };
 
-exports.update = function(req, res) {
-    User.findById(req.body.id, function(error, user) {
-        user.save();
+exports.search = function(req, res) {
+    User.findById(req.params.id, function(error, user) {
+        if (error) res.send(error);
 
-        res.json()
+        res.send(user)
+    })
+};
+
+exports.update = function(req, res) {
+    User.findById(req.params.id, function(error, user) {
+        user.save(function (error, user) {
+            res.send(user)
+        })
     })
 };

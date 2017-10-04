@@ -3,7 +3,7 @@ var mongoose = require('mongoose')
 
 var userSchema = new Schema({
     username: { type: String, required: "Nombre de usuario requerido" },
-    password: { type: String, required: "Contraseña requerida" },
+    password: { type: String, required: "Contraseña requerida", select: false },
     type: { type: String, enum: ["user"] },
     names: { type: String, required: "Nombre(s) requeridos" },
     surnames: { type: String, required: "Apellido(s) requeridos" },
@@ -12,7 +12,7 @@ var userSchema = new Schema({
         code: Number,
         number: Number
     },
-    mail: { type: String, required: "Correo electronico requerido" },
+    mail: { type: String, required: "Correo electronico requerido", unique : true },
     social: {
         facebook: String,
         twitter: String,
@@ -24,7 +24,7 @@ var userSchema = new Schema({
         location: Number
     },
     born: { type: Date, required: "Fecha de nacimiento requerida" },
-    signed: { type: Date, required: "Fecha de registro requerida" }
+    signed: { type: Date, default:  Date.now }
 });
 
 module.exports = mongoose.model('User', userSchema);
