@@ -2,29 +2,22 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 var clientSchema = new Schema({
-    name: String,
-    password: String,
-    type: String,
-    names: String,
-    surnames: String,
-    profession: String,
+    rut: { type: String, required: "Rut del cliente requerido" },
+    name: { type: String, required: "Nombre del cliente requerido" },
+    area: { type: String, required: "Rubro del cliente requerido" },
+    account: { type: String, required: "Cuenta corriente del cliente requerido" },
     phone: {
         code: Number,
         number: Number
     },
-    mail: String,
-    social: {
-        facebook: String,
-        twitter: String,
-        instagram: String
-    },
+    mail: { type: String, required: "Correo electronico del cliente requerido" },
     direction: {
-        country: String,
-        city: String,
-        street: String,
-        location: Number
+        city: { type: String, required: "Ciudad del cliente requerida" },
+        street: { type: String, required: "Calle del cliente requerida" },
+        number: { type: Number, required: "Numero de la ubicacion del cliente requerido" }
     },
-    born: Date,
+    coordinates: { type: String, required: "Coordenadas de la ubicacion del cliente requerido" },
+    admins: [ String ],
     signed: Date
 });
 
