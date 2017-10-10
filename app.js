@@ -15,14 +15,18 @@ app.use(cors());
 
 var users = require('./controllers/users.js');
 
-app.get('/users/:id', users.search);
 app.post('/users', users.create);
+app.get('/users/:id', users.search);
+
+var clients = require('./controllers/clients.js');
+
+app.post('/clients', clients.create);
 
 var events = require('./controllers/events.js');
 
+app.post('/events', events.create);
 app.get('/events', events.list);
 app.get('/events/:id', events.search);
-app.post('/events', events.create);
 
 var sessions = require('./controllers/sessions.js');
 

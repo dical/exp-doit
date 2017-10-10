@@ -2,7 +2,10 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 var clientSchema = new Schema({
-    rut: { type: String, required: "Rut del cliente requerido" },
+    rut: {
+        body: { type: Number, unique: true },
+        checker: { type: Number }
+    },
     name: { type: String, required: "Nombre del cliente requerido" },
     area: { type: String, required: "Rubro del cliente requerido" },
     account: { type: String, required: "Cuenta corriente del cliente requerido" },
