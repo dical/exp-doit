@@ -1,37 +1,25 @@
-var User = require('../models/user.js');
+var Event = require('../models/event.js');
 
 exports.create = function(req, res) {
-    new User({
-        name: req.body.title,
-        password: req.body.author
-    })
-        .save(function(error, user) {
-            res.json(user)
-        })
-};
+    new Event(req.body).save(function(error, event) {
+        if (error) res.status(403).json(error);
 
-exports.list = function(req, res) {
-    User.find(function(error, users) {
-        res.send(users)
+        res.status(201).json(event)
     })
 };
 
-exports.remove = function(req, res) {
-    User.find(function(error, users) {
-        res.send(users)
+exports.list = function (req, res) {
+    Event.find(function (error, events) {
+        if (error) res.status(403).json(events);
+
+        res.json(events)
     })
 };
 
-exports.replace = function(req, res) {
-    User.find(function(error, users) {
-        res.send(users)
-    })
-};
+exports.search = function (req, res) {
+    Event.findById(req.params.id, function (error, event) {
+        if (error) res.status(403).json(error);
 
-exports.update = function(req, res) {
-    User.findById(req.body.id, function(error, user) {
-        user.save();
-
-        res.json()
+        res.json(event)
     })
 };

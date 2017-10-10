@@ -3,6 +3,7 @@ var mongoose = require('mongoose')
 
 var eventSchema = new Schema({
     name: { type: String, required: "Nombre del evento requerido" },
+    own: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: "Dueño del evento requerido" },
     details: String,
     start: { type: Date, required: "Fecha de inicio requerida" },
     end: { type: Date, required: "Fecha de termino requerida" },
@@ -10,7 +11,7 @@ var eventSchema = new Schema({
         code: Number,
         number: Number
     },
-    direction: {
+    address: {
         city: { type: String, required: "Ciudad del eventa requerida" },
         street: { type: String, required: "Calle del evento requerida" },
         number: { type: Number, required: "Numero de la ubicacion del evento requerido" }

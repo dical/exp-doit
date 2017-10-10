@@ -1,9 +1,18 @@
 var User = require('../models/user.js');
 
 exports.create = function(req, res) {
-    new User(req.body.data.attributes).save(function(error, user) {
-            if (error) res.json(error);
+    if (!req.body.hasOwnProperty('username') || !req.body.hasOwnProperty('password')) {
+        return res.status(403).json({
+            type: 'message',
+            data: {
+                text: 'Datos incorrectos'
+            }
+        });
+    }
 
-            res.json(user)
-        })
+    User.findOne(req.body, function(error, user) {
+        if (error) res.status(403).json(error);
+
+        res.status(201).json(user)
+    });
 };
