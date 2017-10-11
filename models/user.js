@@ -4,10 +4,19 @@ var mongoose = require('mongoose')
 var userSchema = new Schema({
     username: { type: String, required: "Nombre de usuario requerido", unique : true },
     password: { type: String, required: "Contraseña requerida", select: false },
-    type: { type: String, enum: ["user"] },
+    state: { type: String, enum: ["enable"], select: false },
     names: { type: String, required: "Nombre(s) requeridos" },
-    surnames: { type: String, required: "Apellido(s) requeridos" },
-    profession: String,
+    surnames: { type: String },
+    phrase: String,
+    business: {
+        rut: {
+            body: { type: Number, unique: true },
+            checker: { type: Number }
+        },
+        area: { type: String },
+        account: { type: String },
+        coordinates: { type: String }
+    },
     phone: {
         code: Number,
         number: Number

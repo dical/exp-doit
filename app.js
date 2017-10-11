@@ -18,10 +18,6 @@ var users = require('./controllers/users.js');
 app.post('/users', users.create);
 app.get('/users/:id', users.search);
 
-var clients = require('./controllers/clients.js');
-
-app.post('/clients', clients.create);
-
 var events = require('./controllers/events.js');
 
 app.post('/events', events.create);
@@ -32,6 +28,6 @@ var sessions = require('./controllers/sessions.js');
 
 app.post('/sessions', sessions.create);
 
-var server = app.listen(process.env.PORT || 3001, function() {
+var server = app.listen(process.env.PORT || 8081, function() {
     console.log("Express server listening on port %d", server.address().port);
 });
