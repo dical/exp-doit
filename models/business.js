@@ -4,7 +4,7 @@ var mongoose = require('mongoose')
 var businessSchema = new Schema({
     user: { type: Schema.ObjectId, ref: 'User', required: "Dueño del evento requerido" },
     rut: {
-        body: { type: Number, unique: true },
+        body: { type: Number, unique: true, sparse: true },
         checker: { type: Number }
     },
     area: { type: String },
