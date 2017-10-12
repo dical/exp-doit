@@ -12,7 +12,7 @@ exports.create = function(req, res) {
 
     User.findOne(req.body, function(error, user) {
         if (error) return res.status(403).json(error);
-        if (!user) return res.status(403).json({errors: { text: 'Datos incorrectos' }});
+        if (!user) return res.status(403).json({ errors: { data: { message: 'Datos incorrectos' } } });
 
         return res.status(201).json(user)
     });
