@@ -8,15 +8,6 @@ var userSchema = new Schema({
     names: { type: String, required: "Nombre(s) requeridos" },
     surnames: { type: String },
     phrase: String,
-    business: {
-        rut: {
-            body: { type: Number, unique: true },
-            checker: { type: Number }
-        },
-        area: { type: String },
-        account: { type: String },
-        coordinates: { type: String }
-    },
     phone: {
         code: Number,
         number: Number
