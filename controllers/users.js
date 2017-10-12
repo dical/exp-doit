@@ -18,9 +18,9 @@ exports.create = function(req, res) {
 };
 
 exports.search = function (req, res) {
-    User.findOne(req.param.id, function (error, user) {
-        if (error) res.status(403).json(error);
+    User.findOne(req.params.id, function (error, user) {
+        if (error) return res.status(403).json(error);
 
-        res.json(user)
+        return res.json(user)
     })
 };
