@@ -2,7 +2,7 @@ var User = require('../models/user.js');
 
 exports.create = function(req, res) {
     new User(req.body).save(function(error, user) {
-        if (error) res.status(403).json(extract(error));
+        if (error) res.status(403).json(error);
 
         res.status(201).json(user)
     })
@@ -14,18 +14,4 @@ exports.search = function (req, res) {
 
         res.json(user)
     })
-};
-
-var extract = function(error) {
-    if (error.hasOwnProperty('code')) {
-        return {
-            errors: {
-                username: {
-                    message: "Nombre de usuario ya registrado"
-                }
-            }
-        }
-    }
-
-    return error
 };
