@@ -9,8 +9,8 @@ exports.create = function(req, res) {
 };
 
 exports.list = function (req, res) {
-    Event.find(function (error, events) {
-        if (error) res.status(403).json(events);
+    Event.find({}).sort({ start : 'desc' }).exec(function (error, events) {
+        if (error) res.status(403).json(error);
 
         res.json(events)
     })
