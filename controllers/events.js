@@ -28,8 +28,8 @@ exports.list = function (req, res) {
 
 exports.search = function (req, res) {
     Event.findById(req.params.id).populate('own').exec(function (error, event) {
-        if (error) res.status(403).json(error);
+        if (error) return res.status(403).json(error);
 
-        res.json(event)
+        return res.status(200).json(event)
     })
 };
