@@ -19,7 +19,7 @@ exports.edit = function(req, res) {
 };
 
 exports.list = function (req, res) {
-    Event.find({}).sort({ start : 'desc' }).exec(function (error, events) {
+    Event.find({}).sort({ start : 'asc' }).exec(function (error, events) {
         if (error) res.status(403).json(error);
 
         res.json(events)
