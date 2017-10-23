@@ -20,6 +20,7 @@ app.get('/users/:id', users.search);
 
 var events = require('./controllers/events.js');
 
+app.patch('/events/:id', events.edit);
 app.post('/events', events.create);
 app.get('/events', events.list);
 app.get('/events/:id', events.search);
