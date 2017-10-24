@@ -20,7 +20,8 @@ var eventSchema = new Schema({
     price: { type: Number, required: "Precio del evento requerido" },
     quotas: { type: Number, required: "Cupos del eventos requeridos" },
     tags: [ String ],
-    image: { type: String, default: '/images/event.jpg' }
+    image: { type: String, default: '/images/event.jpg' },
+    participants: [ String ]
 });
 
 module.exports = mongoose.model('Event', eventSchema);
