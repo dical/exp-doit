@@ -9,12 +9,8 @@ exports.create = function(req, res) {
 };
 
 exports.edit = function(req, res) {
-    console.log(req.body);
-
-    Event.findByIdAndUpdate(req.params.id, { $set: req.body }, function (error, event) {
+    Event.findByIdAndUpdate(req.params.id, req.body, function (error, event) {
         if (error) return res.status(403).json(error);
-
-        console.log(event.participants);
 
         return res.status(200).json(event)
     })
