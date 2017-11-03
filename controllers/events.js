@@ -17,7 +17,20 @@ exports.edit = function(req, res) {
 };
 
 exports.list = function (req, res) {
-    Event.find({}).sort({ start : 'desc' }).exec(function (error, events) {
+    var sort = { start: 'desc' },
+        find = { };
+
+    if (req.query.hasOwnProperty('sort')) {
+        if (req.query.sort === 'participants') {
+            // sin terminar, aggr de mongodb
+        }
+    }
+
+    if (req.query.hasOwnProperty('q')) {
+        find['name'] = new RegExp("" + req.query.q + "", "i");
+    }
+
+    Event.find(find).sort(sort).exec(function (error, events) {
         if (error) return res.status(403).json(error);
 
         return res.json(events)
