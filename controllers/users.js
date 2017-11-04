@@ -1,5 +1,5 @@
-var Business = require('../models/business.js');
-var User = require('../models/user.js');
+var User = require('../models/user.js'),
+    mongoose = require('mongoose');
 
 exports.create = function(req, res) {
     if (req.body.hasOwnProperty('rut')) {
@@ -23,5 +23,21 @@ exports.search = function (req, res) {
         if (error) return res.status(403).json(error);
 
         return res.json(user)
+    })
+};
+
+exports.searchMany = function (req, res) {
+    var ids = req.query.ids.split(',').map(function (e) {
+        return mongoose.Types.ObjectId(e)
+    });
+
+    User.find({
+        '_id': {
+            $in: ids
+        }
+    }, function (error, users) {
+        if (error) return res.status(403).json(error);
+
+        return res.json(users)
     })
 };

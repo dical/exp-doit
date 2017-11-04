@@ -9,19 +9,28 @@ exports.create = function(req, res) {
 };
 
 exports.edit = function(req, res) {
-    console.log(req.body);
-
-    Event.findByIdAndUpdate(req.params.id, { $set: req.body }, function (error, event) {
+    Event.findByIdAndUpdate(req.params.id, req.body, function (error, event) {
         if (error) return res.status(403).json(error);
-
-        console.log(event.participants);
 
         return res.status(200).json(event)
     })
 };
 
 exports.list = function (req, res) {
-    Event.find({}).sort({ start : 'desc' }).exec(function (error, events) {
+    var sort = { start: 'desc' },
+        find = { };
+
+    if (req.query.hasOwnProperty('sort')) {
+        if (req.query.sort === 'participants') {
+            // sin terminar, aggr de mongodb
+        }
+    }
+
+    if (req.query.hasOwnProperty('q')) {
+        find['name'] = new RegExp("" + req.query.q + "", "i");
+    }
+
+    Event.find(find).sort(sort).exec(function (error, events) {
         if (error) return res.status(403).json(error);
 
         return res.json(events)

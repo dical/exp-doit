@@ -17,6 +17,7 @@ var users = require('./controllers/users.js');
 
 app.post('/users', users.create);
 app.get('/users/:id', users.search);
+app.get('/users', users.searchMany);
 
 var events = require('./controllers/events.js');
 
