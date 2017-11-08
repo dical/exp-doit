@@ -1,6 +1,7 @@
 var express = require('express')
     , cors = require('cors')
     , mongoose = require('mongoose')
+	, passport = require('passport')
     , app = module.exports = express()
     , bodyParser = require('body-parser')
     , methodOverride = require('method-override')
@@ -15,6 +16,7 @@ app.use(cors());
 
 var users = require('./controllers/users.js');
 
+app.patch('/users/:id', users.edit);
 app.post('/users', users.create);
 app.get('/users/:id', users.search);
 app.get('/users', users.searchMany);
@@ -25,6 +27,10 @@ app.patch('/events/:id', events.edit);
 app.post('/events', events.create);
 app.get('/events', events.list);
 app.get('/events/:id', events.search);
+
+var notifications = require('./controllers/notifications.js');
+
+app.get('/notifications', notifications.list);
 
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:['publish_actions','user_friends','email']}));
 	//2. recibir la respuesta de facebook
