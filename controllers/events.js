@@ -1,5 +1,5 @@
 var Event = require('../models/event.js'),
-    Notify = require('../models/notify.js'),
+    Message = require('../models/message.js'),
     mongoose = require('mongoose');
 
 exports.create = function(req, res) {
@@ -21,13 +21,10 @@ exports.edit = function(req, res) {
                 stringParticipants = stringParticipants.split(id).join('')
             });
 
-            console.log('participante:' + stringParticipants);
-            console.log('activity:' + req.params.id);
-
-            new Notify({
-                name: "Nuevo Participante",
+            new Message({
                 user: new mongoose.Types.ObjectId(stringParticipants),
                 event: new mongoose.Types.ObjectId(req.params.id),
+                type: 'notify',
                 details: "Se unio a la actividad"
             }).save()
         }

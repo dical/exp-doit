@@ -28,9 +28,10 @@ app.post('/events', events.create);
 app.get('/events', events.list);
 app.get('/events/:id', events.search);
 
-var notifications = require('./controllers/notifications.js');
+var messages = require('./controllers/messages.js');
 
-app.get('/notifications', notifications.list);
+app.get('/messages', messages.list);
+app.post('/messages', messages.create);
 
 app.get('/auth/facebook', passport.authenticate('facebook',{scope:['publish_actions','user_friends','email']}));
 	//2. recibir la respuesta de facebook
