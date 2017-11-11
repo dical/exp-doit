@@ -15,14 +15,14 @@ exports.edit = function(req, res) {
         if (error) return res.status(403).json(error);
 
         if (req.body.hasOwnProperty('$addToSet')) {
-            var stringParticipants = req.body.$addToSet.participants.$each.join('');
+            var stringParticipants = req.body.$addToSet.participants.$each.join(',');
 
             event.participants.forEach(function(id) {
                 stringParticipants = stringParticipants.split(id).join('')
             });
 
             new Message({
-                user: new mongoose.Types.ObjectId(stringParticipants),
+                user: new mongoose.Types.ObjectId(stringParticipants.split(',').join('')),
                 event: new mongoose.Types.ObjectId(req.params.id),
                 type: 'notify',
                 details: "Se unio a la actividad"
