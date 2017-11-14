@@ -23,9 +23,18 @@ var userSchema = new Schema({
     },
     mail: { type: String, required: "Correo electronico requerido", unique : true },
     social: {
-        facebook: String,
-        twitter: String,
-        instagram: String
+        facebook: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
+        twitter: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
+        google: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
     },
     direction: {
         city: String,

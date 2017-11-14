@@ -5,8 +5,10 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "*",
+    "cookie-session": "^2.0.0-beta.3",
     "cors": "^2.8.4",
     "express": "*",
+    "express-session": "^1.15.6",
     "method-override": "*",
     "mongoose": "*",
     "passport": "^0.4.0",

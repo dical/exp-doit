@@ -6,6 +6,8 @@ var express = require('express')
     , bodyParser = require('body-parser')
     , methodOverride = require('method-override')
     , env = process.env.NODE_ENV || 'development'
+    , session = require('express-session')
+    , cookiesession=require("cookie-session")
     , config = require('./config')[env];
 
 mongoose.connect(config.db, { useMongoClient: true });
@@ -13,6 +15,14 @@ mongoose.connect(config.db, { useMongoClient: true });
 app.use(bodyParser.json());
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(cors());
+app.use(cookiesession({keys:['ramudaksjqw','sessasdjhkahkhasd']}));
+
+app.use(session({
+  secret: 'teclado de gato',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 
 var users = require('./controllers/users.js');
 
@@ -33,32 +43,54 @@ var messages = require('./controllers/messages.js');
 app.get('/messages', messages.list);
 app.post('/messages', messages.create);
 
-app.get('/auth/facebook', passport.authenticate('facebook',{scope:['publish_actions','user_friends','email']}));
+var passportraiz=require('./passport.js')(passport);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Flujo de autenticacion CON FACEBOOK
+//esto inicia el flujo de autenticacion y redirige a facebook
+app.get('/auth/facebook', 
+	passport.authenticate('facebook',{}));
 	//2. recibir la respuesta de facebook
-app.get('/auth/facebook/callback', passport.authenticate('facebook',{failureRedirect: '/sessions'}),
+app.get('/auth/facebook/callback', 
+	passport.authenticate('facebook',{failureRedirect: '/'}),
 	function(req,res){
 		console.log(req.session);
-		res.redirect("holamundo");
-	});
+		res.redirect('/');
+});
 
-
-app.get('/auth/twitter', passport.authenticate('twitter'));
+//esto inicia el flujo de autenticacion y redirige a twitter
+app.get('/auth/twitter', 
+	passport.authenticate('twitter'));
 	//2. recibir la respuesta de twitter
-app.get('/auth/twitter/callback', passport.authenticate('twitter',{failureRedirect: '/sessions'}),
+app.get('/auth/twitter/callback', 
+	passport.authenticate('twitter',{failureRedirect: '/sessions'}),
 	function(req,res){
 		console.log(req.session);
-		res.redirect("holamundo");
-	});
+		res.redirect('/');
+});
 
-app.get('/auth/google', passport.authenticate('google',{ scope: ['https://www.googleapis.com/auth/plus.login'] }));
+//Flujo de autenticacion CON GOOGLE
+//esto inicia el flujo de autenticacion y redirige a google
+app.get('/auth/google', 
+	passport.authenticate('google',{ scope: ['https://www.googleapis.com/auth/plus.login'] }));
 	//2. recibir la respuesta de google
 app.get('/auth/google/oauth2callback', 
 	passport.authenticate('google',{failureRedirect: '/sessions'}),
 	function(req,res){
 		console.log(req.session);
-		res.redirect("holamundo");
-	});
+		res.redirect('/');
+});
 
+
+// LOGOUT ROUTE
+app.get('/auth/logout',
+  function(req, res) {
+       	req.logout();
+      	req.session = null; 
+      	res.redirect('/');
+});
 
 
 var sessions = require('./controllers/sessions.js');

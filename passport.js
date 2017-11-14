@@ -1,27 +1,15 @@
 var mongoose = require('mongoose');
-var User = require("./models/user.js").User;
 
 var TwitterStrategy =  require('passport-twitter').Strategy,
     FacebookStrategy =  require('passport-facebook').Strategy,
+    User = require('./models/user.js').User,
     GoogleStrategy =require('passport-google-oauth').OAuth2Strategy;
 var passport =require("passport");
 var config=require("./config.js");
 
 
 module.exports = function(passport){
-	passport.serializeUser(function(user, done){
-		done(null, user);
-	});
-
-	passport.deserializeUser(function(obj, done){
-		User.findById(obj, function(err, user) {
-            done(err, user);
     
-        //done(null, obj);
-        });
-	});
-
-	
     //configurar nuestra autenticacion
     //1. definir la estrategia
     passport.use(new FacebookStrategy({
@@ -30,68 +18,101 @@ module.exports = function(passport){
          callbackURL:'http://localhost:8081/auth/facebook/callback'
     },function(accessToken, refreshToken, profile, cb){
             //guardar en la bd
-        User.findOrCreate({uid: profile.id},{
-                username: profile.displayName,
-                provider: 'facebook',
-                accessToken: accessToken
-         },function(err, user){
+        User.findOne({social.facebook.uid:profile.id, social.facebook.provider:profile.provider}, function(err,user){
+            if(err) throw(err);
+            if(!err && user!= null) return cb(null, user);
+            var user= new User({
+                social.facebook.accessToken: accessToken,
+                social.facebook.provider: profile.provider,
+                social.facebook.uid: profile.id,
+                username:profile.displayName
+            });
+            user.save(function(err) {
+                if(err) throw err;
                 cb(null, user);
+            });
+             //cb(null, user);
             //guardar al usuario en la session
             //mandar a llamar al cb, completa la autentitcacion
-                
-         });
-            /* este es un usuario creado falsamente
-            var user = {
-                 accessToken:accessToken,
-                profile:profile
-            }
-            */
-    }));
-    //configurar nuestra autenticacion CON TWITTER
+        });
+}));
+//configurar nuestra autenticacion CON TWITTER
     //1. definir la estrategia
     passport.use(new TwitterStrategy({
          consumerKey: config.twitter.key,
          consumerSecret:config.twitter.secret,
          callbackURL:'http://www.example.com/auth/twitter/callback'
     },function(accessToken, refreshToken, profile, cb){
-            //guardar en la bd
-        User.findOrCreate({uid: profile.id},{
-                username: profile.displayName,
-                provider: 'twitter',
-                accessToken: accessToken
-         },function(err, user){
+    //guardar en la bd
+        User.findOne({social.twitter.uid:profile.id, social.twitter.provider:profile.provider}, function(err,user){
+            if(err) throw(err);
+            if(!err && user!= null) return cb(null, user);
+            var user= new User({
+                social.twitter.accessToken: accessToken,
+                social.twitter.provider: profile.provider,
+                social.twitter.uid: profile.id,
+                username:profile.displayName
+            });
+            user.save(function(err) {
+                if(err) throw err;
                 cb(null, user);
+            });
+             //cb(null, user);
             //guardar al usuario en la session
             //mandar a llamar al cb, completa la autentitcacion
-                
-         });
-            /* este es un usuario creado falsamente
-            var user = {
-                 accessToken:accessToken,
-                profile:profile
-            }
-            */
-    }));
-    //configurar nuestra autenticacion CON GOOGLE PLUS
+        });
+}));
+//configurar nuestra autenticacion CON GOOGLE PLUS
     //1. definir la estrategia
     passport.use(new GoogleStrategy({
          clientID: config.google.id,
          clientSecret:config.google.secret,
          callbackURL:'http://localhost:8081/auth/google/oauth2callback'
     },function(accessToken, refreshToken, profile, cb){
-            //guardar en la bd
-        User.findOrCreate({uid: profile.id},{
-                username: profile.displayName,
-                provider: 'google',
-                accessToken: accessToken
-         },function(err, user){
+//guardar en la bd
+        User.findOne({social.google.uid:profile.id, social.google.provider:profile.provider}, function(err,user){
+            if(err) throw(err);
+            if(!err && user!= null) return cb(null, user);
+            var user= new User({
+                social.google.accessToken: accessToken,
+                social.google.provider: profile.provider,
+                social.google.uid: profile.id,
+                username:profile.displayName
+            });
+            user.save(function(err) {
+                if(err) throw err;
                 cb(null, user);
+            });
+             //cb(null, user);
             //guardar al usuario en la session
             //mandar a llamar al cb, completa la autentitcacion
-                
-         });
-    }));
-	
-}
+        });
+}));
 
+        //definir com guardar el usuario en la session
+    passport.serializeUser(function(user, done){
+        //obtener el id y guardarlo dentro de la session
+            user.save(function(err) {
+                if(err) throw err;
+                done(null, user);
+                //console.log(user._id);
+            });
+        //done(null, user);
+
+
+    });
+    // definir como vamos a retomar el usuario de la session
+    passport.deserializeUser(function(id, done){
+        User.findById(id, function(err, user) {
+            done(err, user);
+            console.log("hola usuario", user.username);
+            if(user.name == null){
+                console.log("el usuario debe ingresar mas datos");
+            }
+        });
+        //aca se busca en la base de dats y se muestra el usuario
+        //done(null, obj);
+    });
+
+}
 
