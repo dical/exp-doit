@@ -7,11 +7,11 @@ module.exports = {
   },
  facebook:{
  	id:'348691095555191',
-	secret:'d3216bc72681bd7a151068daed6f21df'
+	secret:'2e75154070c799ca8649b9218030e0d3'
  },
  twitter:{
- 	key : 'yQgkU3Tg6bKFD7m8uvtPFBt9r',
-	secret: 'yhAw3YierQGCG1NN1LHGDSxmYmU3OgGDEDTGYmLCowRRWomRdM'
+ 	key : 'dLsTHj8zqnRP5asM80EAc7FMd',
+	secret: 'xaLc5TlX1Fymn7wKPFIA6jMyajxRmnQPtcnSx26OFw1HsMjdDt'
  },
  google:{
  	id:'837580265286-t092f6642r2qth5cvdf6uaa145fe3sui.apps.googleusercontent.com',

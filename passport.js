@@ -15,7 +15,7 @@ module.exports = function(passport){
     passport.use(new FacebookStrategy({
          clientID: config.facebook.id,
          clientSecret:config.facebook.secret,
-         callbackURL:'http://localhost:8081/auth/facebook/callback'
+         callbackURL:'http://doitexp.com/auth/facebook/callback'
     },function(accessToken, refreshToken, profile, cb){
             //guardar en la bd
         User.findOne({social.facebook.uid:profile.id, social.facebook.provider:profile.provider}, function(err,user){
@@ -41,7 +41,7 @@ module.exports = function(passport){
     passport.use(new TwitterStrategy({
          consumerKey: config.twitter.key,
          consumerSecret:config.twitter.secret,
-         callbackURL:'http://www.example.com/auth/twitter/callback'
+         callbackURL:'http://www.doitexp.com/auth/twitter/callback'
     },function(accessToken, refreshToken, profile, cb){
     //guardar en la bd
         User.findOne({social.twitter.uid:profile.id, social.twitter.provider:profile.provider}, function(err,user){
@@ -67,7 +67,7 @@ module.exports = function(passport){
     passport.use(new GoogleStrategy({
          clientID: config.google.id,
          clientSecret:config.google.secret,
-         callbackURL:'http://localhost:8081/auth/google/oauth2callback'
+         callbackURL:'http://doitexp.com/auth/google/oauth2callback'
     },function(accessToken, refreshToken, profile, cb){
 //guardar en la bd
         User.findOne({social.google.uid:profile.id, social.google.provider:profile.provider}, function(err,user){
