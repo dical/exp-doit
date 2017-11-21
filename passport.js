@@ -15,18 +15,23 @@ module.exports = function(passport){
     passport.use(new FacebookStrategy({
          clientID: config.facebook.id,
          clientSecret:config.facebook.secret,
-         callbackURL:'http://doitexp.com/auth/facebook/callback'
+         callbackURL:'http://doitexp.com/auth/facebook/callback',
+         profileFields: ['id', 'displayName', 'photos', 'email']
     },function(accessToken, refreshToken, profile, cb){
             //guardar en la bd
-        User.findOne({social.facebook.uid:profile.id, social.facebook.provider:profile.provider}, function(err,user){
+        User.findOne({social:{facebook:{uid:profile.id}},social:{facebook:{provider:profile.provider}}}, function(err,user){
             if(err) throw(err);
             if(!err && user!= null) return cb(null, user);
             var user= new User({
-                social.facebook.accessToken: accessToken,
-                social.facebook.provider: profile.provider,
-                social.facebook.uid: profile.id,
-                username:profile.displayName
-            });
+                username:profile.displayName,
+                email:profile.emails[0].value,
+                social:{
+                    facebook:{
+                                accessToken: accessToken,
+                                provider: profile.provider,
+                                uid: profile.id }
+                        }
+                });
             user.save(function(err) {
                 if(err) throw err;
                 cb(null, user);
@@ -67,17 +72,23 @@ module.exports = function(passport){
     passport.use(new GoogleStrategy({
          clientID: config.google.id,
          clientSecret:config.google.secret,
-         callbackURL:'http://doitexp.com/auth/google/oauth2callback'
+         callbackURL:'http://doitexp.com/auth/google/oauth2callback',
+         profileFields: ['id', 'displayName', 'photos', 'email']
     },function(accessToken, refreshToken, profile, cb){
 //guardar en la bd
-        User.findOne({social.google.uid:profile.id, social.google.provider:profile.provider}, function(err,user){
+        User.findOne({social:{google:{uid:profile.id}}, social:{google:{provider:profile.provider}}}, function(err,user){
             if(err) throw(err);
             if(!err && user!= null) return cb(null, user);
             var user= new User({
-                social.google.accessToken: accessToken,
-                social.google.provider: profile.provider,
-                social.google.uid: profile.id,
-                username:profile.displayName
+                username:profile.displayName,
+                email:profile.emails[0].value,
+                social:{
+                    google:{
+                        accessToken: accessToken,
+                        provider: profile.provider,
+                        uid: profile.id
+                    }
+                }  
             });
             user.save(function(err) {
                 if(err) throw err;

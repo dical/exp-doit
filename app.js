@@ -51,7 +51,7 @@ app.use(passport.session());
 //Flujo de autenticacion CON FACEBOOK
 //esto inicia el flujo de autenticacion y redirige a facebook
 app.get('/auth/facebook', 
-	passport.authenticate('facebook',{}));
+	passport.authenticate('facebook',{ authType: 'rerequest', scope: ['email'] }));
 	//2. recibir la respuesta de facebook
 app.get('/auth/facebook/callback', 
 	passport.authenticate('facebook',{failureRedirect: '/'}),
@@ -71,10 +71,14 @@ app.get('/auth/twitter/callback',
 		res.redirect('/');
 });
 
+
 //Flujo de autenticacion CON GOOGLE
 //esto inicia el flujo de autenticacion y redirige a google
 app.get('/auth/google', 
-	passport.authenticate('google',{ scope: ['https://www.googleapis.com/auth/plus.login'] }));
+	passport.authenticate('google',{ scope: [
+		'https://www.googleapis.com/auth/plus.login',
+		'https://www.googleapis.com/auth/userinfo.email',
+  	  	'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
 	//2. recibir la respuesta de google
 app.get('/auth/google/oauth2callback', 
 	passport.authenticate('google',{failureRedirect: '/sessions'}),
@@ -82,6 +86,7 @@ app.get('/auth/google/oauth2callback',
 		console.log(req.session);
 		res.redirect('/');
 });
+
 
 
 // LOGOUT ROUTE
