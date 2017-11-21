@@ -23,7 +23,7 @@ module.exports = function(passport){
             if(err) throw(err);
             if(!err && user!= null) return cb(null, user);
             var user= new User({
-                username:profile.displayName,
+                usernames:profile.displayName,
                 email:profile.emails[0].value,
                 social:{
                     facebook:{
@@ -49,14 +49,19 @@ module.exports = function(passport){
          callbackURL:'http://www.doitexp.com/auth/twitter/callback'
     },function(accessToken, refreshToken, profile, cb){
     //guardar en la bd
-        User.findOne({social.twitter.uid:profile.id, social.twitter.provider:profile.provider}, function(err,user){
+        User.findOne({social:{twitter:{uid:profile.id}}, social:{twitter:{provider:profile.provider}}}, function(err,user){
             if(err) throw(err);
             if(!err && user!= null) return cb(null, user);
             var user= new User({
-                social.twitter.accessToken: accessToken,
-                social.twitter.provider: profile.provider,
-                social.twitter.uid: profile.id,
-                username:profile.displayName
+                usernames:profile.displayName,
+                social:{
+                    twitter:{
+                            accessToken: accessToken,
+                            provider: profile.provider,
+                            uid: profile.id
+                    }
+                }
+
             });
             user.save(function(err) {
                 if(err) throw err;
@@ -80,7 +85,7 @@ module.exports = function(passport){
             if(err) throw(err);
             if(!err && user!= null) return cb(null, user);
             var user= new User({
-                username:profile.displayName,
+                usernames:profile.displayName,
                 email:profile.emails[0].value,
                 social:{
                     google:{
@@ -116,7 +121,7 @@ module.exports = function(passport){
     passport.deserializeUser(function(id, done){
         User.findById(id, function(err, user) {
             done(err, user);
-            console.log("hola usuario", user.username);
+            console.log("hola usuario", user.usernames);
             if(user.name == null){
                 console.log("el usuario debe ingresar mas datos");
             }
