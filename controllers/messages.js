@@ -20,7 +20,7 @@ exports.create = function(req, res) {
 };
 
 exports.list = function (req, res) {
-    var sort = { start: 'desc' },
+    var sort = { date: 'desc' },
         find = { };
 
     if (req.query.hasOwnProperty('user')) {
@@ -29,6 +29,14 @@ exports.list = function (req, res) {
 
     if (req.query.hasOwnProperty('event')) {
         find['event'] = new mongoose.Types.ObjectId(req.query.event);
+    }
+
+    if (req.query.hasOwnProperty('type')) {
+        find['type'] = req.query.type;
+    }
+
+    if (req.query.hasOwnProperty('sort')) {
+        sort['date'] = req.query.sort;
     }
 
     Message.find(find).sort(sort).populate('user event response').exec(function (error, messages) {

@@ -7,7 +7,7 @@ var express = require('express')
     , methodOverride = require('method-override')
     , env = process.env.NODE_ENV || 'development'
     , session = require('express-session')
-    , cookiesession=require("cookie-session")
+    , cookiesession = require("cookie-session")
     , config = require('./config')[env];
 
 mongoose.connect(config.db, { useMongoClient: true });
@@ -15,14 +15,26 @@ mongoose.connect(config.db, { useMongoClient: true });
 app.use(bodyParser.json());
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(cors());
-app.use(cookiesession({keys:['ramudaksjqw','sessasdjhkahkhasd']}));
 
-app.use(session({
-  secret: 'teclado de gato',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}))
+app.use(
+    cookiesession({
+        keys: [
+            'ramudaksjqw',
+            'sessasdjhkahkhasd'
+        ]
+    })
+);
+
+app.use(
+    session({
+        secret: 'teclado de gato',
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            secure: true
+        }
+    })
+);
 
 var users = require('./controllers/users.js');
 

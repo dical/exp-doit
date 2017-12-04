@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    usernames: { type: String, required: "Nombre de usuario requerido", unique : true },
+    username: { type: String, required: "Nombre de usuario requerido", unique : true },
     password: { type: String, required: "Contraseña requerida", select: false },
     state: { type: String, enum: ["enable"], select: false },
     names: { type: String, required: "Nombre(s) requeridos" },

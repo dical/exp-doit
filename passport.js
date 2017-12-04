@@ -1,46 +1,67 @@
-var mongoose = require('mongoose');
-
-var TwitterStrategy =  require('passport-twitter').Strategy,
-    FacebookStrategy =  require('passport-facebook').Strategy,
+var TwitterStrategy = require('passport-twitter').Strategy,
+    Facebook = require('passport-facebook').Strategy,
+    GoogleStrategy =require('passport-google-oauth').OAuth2Strategy,
     User = require('./models/user.js').User,
-    GoogleStrategy =require('passport-google-oauth').OAuth2Strategy;
-var passport =require("passport");
-var config=require("./config.js");
+    config = require("./config.js");
 
 
-module.exports = function(passport){
-    
-    //configurar nuestra autenticacion
-    //1. definir la estrategia
-    passport.use(new FacebookStrategy({
-         clientID: config.facebook.id,
-         clientSecret:config.facebook.secret,
-         callbackURL:'http://doitexp.com/auth/facebook/callback',
-         profileFields: ['id', 'displayName', 'photos', 'email']
-    },function(accessToken, refreshToken, profile, cb){
-            //guardar en la bd
-        User.findOne({social:{facebook:{uid:profile.id}},social:{facebook:{provider:profile.provider}}}, function(err,user){
-            if(err) throw(err);
-            if(!err && user!= null) return cb(null, user);
-            var user= new User({
-                usernames:profile.displayName,
-                email:profile.emails[0].value,
-                social:{
+module.exports = function(passport) {
+
+    /*
+     *  Configuracion inicial para la autentificacion con Facebook
+     */
+    var FacebookPassport = {
+        clientID: config.facebook.id,
+        clientSecret: config.facebook.secret,
+        callbackURL: 'http://doitexp.com/auth/facebook/callback',
+        profileFields: ['id', 'displayName', 'photos', 'email']
+    };
+
+    /*
+     *
+     */
+    passport.use(new Facebook(FacebookPassport, function(accessToken, refreshToken, profile, cb) {
+
+        /*
+         *
+         */
+        User.findOne(
+            {
+                social: {
+                    facebook: {
+                        uid:profile.id
+                    }
+                },
+                social: {
                     facebook:{
-                                accessToken: accessToken,
-                                provider: profile.provider,
-                                uid: profile.id }
+                        provider: profile.provider
+                    }
+                }
+            }, function(err, user) {
+                if(err) throw(err);
+                if(!err && user!= null) return cb(null, user);
+                var user= new User({
+                    usernames:profile.displayName,
+                    email:profile.emails[0].value,
+                    social:{
+                        facebook:{
+                            accessToken: accessToken,
+                            provider: profile.provider,
+                            uid: profile.id
                         }
+                    }
                 });
-            user.save(function(err) {
-                if(err) throw err;
-                cb(null, user);
-            });
+
+                user.save(function(err) {
+                    if(err) throw err;
+                    cb(null, user);
+                });
              //cb(null, user);
             //guardar al usuario en la session
             //mandar a llamar al cb, completa la autentitcacion
-        });
-}));
+            });
+    }));
+
 //configurar nuestra autenticacion CON TWITTER
     //1. definir la estrategia
     passport.use(new TwitterStrategy({
