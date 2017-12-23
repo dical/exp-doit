@@ -1,13 +1,14 @@
 var mongoose = require('mongoose')
-    , Schema = mongoose.Schema;
+    , Schema = mongoose.Schema
+    , MongooseBcrypt = require('mongoose-bcrypt');
 
 var userSchema = new Schema({
-    username: { type: String, required: "Nombre de usuario requerido", unique : true },
-    password: { type: String, required: "Contraseña requerida", select: false },
+    username: { type: String, required: "Nombre de usuario requerido",minlength:[5, "El nombre de usuario es muy corto"],maxlength:[15, "El nombre de usuario es muy Largo"], unique : true },
+    password: { type: String,required: "Contraseña requerida",select: false,minlength:[9, "la Clave es muy corta"]},
     state: { type: String, enum: ["enable"], select: false },
     names: { type: String, required: "Nombre(s) requeridos" },
     surnames: String,
-    phrase: { type: String, default: 'wubba lubba dub dub' },
+    phrase: { type: String, default: 'Edita tu frase en la rueda ubicada en la parte superior derecha' },
     business: {
         rut: {
             body: { type: Number, unique: true, sparse: true },
@@ -21,7 +22,7 @@ var userSchema = new Schema({
         code: Number,
         number: Number
     },
-    mail: { type: String, required: "Correo electronico requerido", unique : true },
+    mail: { type: String, required: "Correo electronico requerido", unique : true},
     social: {
         facebook: {uid:String,
                     accessToken:String,
@@ -45,5 +46,8 @@ var userSchema = new Schema({
     signed: { type: Date, default:  Date.now, select: false },
     image: { type: String, default: "/images/landscape.jpg" }
 });
+
+
+userSchema.plugin(MongooseBcrypt);
 
 module.exports = mongoose.model('User', userSchema);
