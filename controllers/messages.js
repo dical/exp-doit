@@ -10,18 +10,32 @@ exports.create = function(req, res) {
         req.body.event = new mongoose.Types.ObjectId(req.body.event)
     }
 
-    console.log(req.body);
+    var newMessage = new Message(req.body);
 
-    new Message(req.body).save(function(error, message) {
+    if (req.body.hasOwnProperty('respond') && req.body.respond.hasOwnProperty('_id')) {
+        delete newMessage.responses;
+    } else {
+        newMessage['responses'] = []
+    }
+
+    newMessage.save(function(error, message) {
         if (error) return res.status(403).json(error);
 
-        return res.status(201).json(message)
+        if (req.body.hasOwnProperty('respond') && req.body.respond.hasOwnProperty('_id')) {
+            Message.findByIdAndUpdate(req.body.respond._id, { $addToSet: { responses: { $each: [ message._id ] } } }, function (error) {
+                if (error) return res.status(403).json(error);
+
+                return res.status(201).json(message)
+            })
+        } else {
+            return res.status(201).json(message)
+        }
     })
 };
 
 exports.list = function (req, res) {
     var sort = { date: 'desc' },
-        find = { };
+        find = { responses: { $exists: true } };
 
     if (req.query.hasOwnProperty('user')) {
         find['user'] = new mongoose.Types.ObjectId(req.query.user);
@@ -39,7 +53,7 @@ exports.list = function (req, res) {
         sort['date'] = req.query.sort;
     }
 
-    Message.find(find).sort(sort).populate('user event response').exec(function (error, messages) {
+    Message.find(find).sort(sort).populate('user event responses').exec(function (error, messages) {
         if (error) return res.status(403).json(error);
 
         return res.json(messages)

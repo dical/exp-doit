@@ -55,6 +55,23 @@ var messages = require('./controllers/messages.js');
 app.get('/messages', messages.list);
 app.post('/messages', messages.create);
 
+var moments = require('./controllers/moments.js');
+
+app.get('/moments', moments.list);
+app.post('/moments', moments.create);
+
+var inscriptions = require('./controllers/inscriptions.js');
+
+app.delete('/inscriptions/:_id', inscriptions.remove);
+app.get('/inscriptions', inscriptions.list);
+app.post('/inscriptions', inscriptions.create);
+
+var ranks = require('./controllers/ranks.js');
+
+app.get('/ranks', ranks.list);
+app.patch('/ranks/:_id', ranks.edit);
+app.post('/ranks', ranks.create);
+
 var passportraiz=require('./passport.js')(passport);
 
 app.use(passport.initialize());
