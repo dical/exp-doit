@@ -37,6 +37,6 @@ exports.edit = function(req, res) {
     User.findByIdAndUpdate(req.params.id, req.body, { new: true }, function (error, user) {
         if (error) return res.status(403).json(error);
 
-        return res.status(200).json(user)
+        return res.status(202).json(user)
     })
 };
