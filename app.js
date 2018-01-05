@@ -8,7 +8,9 @@ var express = require('express')
     , env = process.env.NODE_ENV || 'development'
     , session = require('express-session')
     , cookiesession = require("cookie-session")
-    , config = require('./config')[env];
+    , config = require('./config')[env]
+    , FacebookStrategy = require("passport-facebook").Strategy
+    , User = require("./models/user");
 
 mongoose.connect(config.db, { useMongoClient: true });
 
@@ -36,6 +38,8 @@ app.use(
     })
 );
 
+
+
 var users = require('./controllers/users.js');
 
 app.patch('/users/:id', users.edit);
@@ -55,6 +59,23 @@ var messages = require('./controllers/messages.js');
 app.get('/messages', messages.list);
 app.post('/messages', messages.create);
 
+var moments = require('./controllers/moments.js');
+
+app.get('/moments', moments.list);
+app.post('/moments', moments.create);
+
+var inscriptions = require('./controllers/inscriptions.js');
+
+app.delete('/inscriptions/:_id', inscriptions.remove);
+app.get('/inscriptions', inscriptions.list);
+app.post('/inscriptions', inscriptions.create);
+
+var ranks = require('./controllers/ranks.js');
+
+app.get('/ranks', ranks.list);
+app.patch('/ranks/:_id', ranks.edit);
+app.post('/ranks', ranks.create);
+
 var passportraiz=require('./passport.js')(passport);
 
 app.use(passport.initialize());
@@ -62,42 +83,21 @@ app.use(passport.session());
 
 //Flujo de autenticacion CON FACEBOOK
 //esto inicia el flujo de autenticacion y redirige a facebook
-app.get('/auth/facebook', 
-	passport.authenticate('facebook',{ authType: 'rerequest', scope: ['email'] }));
+app.get('/auth/facebook', // para donde lo manda ?? authenticate ?? a la estrategia
+    passport.authenticate('facebook',{ authType:'rerequest', scope: ['publish_pages','public_profile','email'] }) // yo creo que aqui falta algo cuando tu mandas la peticion y que te devuelva algo en algun parametros por que te manda un html entero mira aca tengo uno que funca 
+    //function(req,res){
+    //  console.log(req)
+    //}
+);
+    //passport.authenticate('facebook',{ }));
 	//2. recibir la respuesta de facebook
 app.get('/auth/facebook/callback', 
 	passport.authenticate('facebook',{failureRedirect: '/'}),
 	function(req,res){
-		console.log(req.session);
-		res.redirect('/');
+		res.redirect('http://localhost:3000/user/'); // cuando funciona lo redirecciona en esta parte
+        //res.status(200).json({'prueb':'prueba'});
 });
 
-//esto inicia el flujo de autenticacion y redirige a twitter
-app.get('/auth/twitter', 
-	passport.authenticate('twitter'));
-	//2. recibir la respuesta de twitter
-app.get('/auth/twitter/callback', 
-	passport.authenticate('twitter',{failureRedirect: '/sessions'}),
-	function(req,res){
-		console.log(req.session);
-		res.redirect('/');
-});
-
-
-//Flujo de autenticacion CON GOOGLE
-//esto inicia el flujo de autenticacion y redirige a google
-app.get('/auth/google', 
-	passport.authenticate('google',{ scope: [
-		'https://www.googleapis.com/auth/plus.login',
-		'https://www.googleapis.com/auth/userinfo.email',
-  	  	'https://www.googleapis.com/auth/plus.profile.emails.read'] }));
-	//2. recibir la respuesta de google
-app.get('/auth/google/oauth2callback', 
-	passport.authenticate('google',{failureRedirect: '/sessions'}),
-	function(req,res){
-		console.log(req.session);
-		res.redirect('/');
-});
 
 
 

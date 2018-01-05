@@ -2,15 +2,6 @@ var User = require('../models/user.js'),
     mongoose = require('mongoose');
 
 exports.create = function(req, res) {
-    if (req.body.hasOwnProperty('rut')) {
-        req.body['business'] = {
-            rut: {
-                body: req.body.rut.split('-')[0],
-                checker: req.body.rut.split('-')[1]
-            }
-        };
-    }
-
     new User(req.body).save(function(error, user) {
         if (error) return res.status(403).json(error);
 
@@ -46,6 +37,6 @@ exports.edit = function(req, res) {
     User.findByIdAndUpdate(req.params.id, req.body, { new: true }, function (error, user) {
         if (error) return res.status(403).json(error);
 
-        return res.status(200).json(user)
+        return res.status(202).json(user)
     })
 };

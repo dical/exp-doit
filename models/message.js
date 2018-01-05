@@ -7,7 +7,7 @@ var messageSchema = new Schema({
     type: { type: String, enum: ['comment', 'notify', 'activity'], default: 'comment' },
     details: String,
     date: { type: Date, default: Date.now() },
-    responses: [{ type: Schema.ObjectId, ref: 'Message' }]
+    responses: { type: [{ type: Schema.ObjectId, ref: 'Message' }], default: undefined }
 });
 
 module.exports = mongoose.model('Message', messageSchema);
