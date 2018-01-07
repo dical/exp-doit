@@ -34,7 +34,7 @@ var userSchema = new Schema({
         google: {uid:String,
                     accessToken:String,
                     provider:String
-                },
+                }
     },
     direction: {
         city: String,
@@ -43,7 +43,8 @@ var userSchema = new Schema({
     },
     born: { type: Date, required: "Fecha de nacimiento requerida", select: false },
     signed: { type: Date, default:  Date.now, select: false },
-    image: { type: String, default: "/images/landscape.jpg" }
+    image: { type: String, default: "/images/landscape.jpg" },
+    agreement: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model('User', userSchema);

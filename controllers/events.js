@@ -16,6 +16,8 @@ exports.create = function(req, res) {
     new Event(req.body).save(function(error, event) {
         if (error) return res.status(403).json(error);
 
+
+
         return res.status(201).json(event)
     })
 };
