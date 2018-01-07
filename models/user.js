@@ -7,7 +7,7 @@ var userSchema = new Schema({
     state: { type: String, enum: ["enable"], select: false },
     names: { type: String, required: "Nombre(s) requeridos" },
     surnames: String,
-    phrase: { type: String, default: 'wubba lubba dub dub' },
+    phrase: { type: String, default: 'Edita tu frase en la rueda ubicada en la parte superior derecha' },
     business: {
         rut: {
             body: { type: Number, unique: true, sparse: true },

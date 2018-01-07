@@ -2,12 +2,9 @@ module.exports = {
   development: {
     db: 'mongodb://localhost/douglas'
   },
-  production: {
-    db: 'mongodb://localhost/sample_api'
-  },
  facebook:{
- 	id:'348691095555191',
-	secret:'2e75154070c799ca8649b9218030e0d3'
+ 	id:'562027577507254',
+	secret:'d46b132d017929b9a1d7e8c7e661df64'
  },
  twitter:{
  	key : 'dLsTHj8zqnRP5asM80EAc7FMd',
