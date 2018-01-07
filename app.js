@@ -72,6 +72,10 @@ app.get('/ranks', ranks.list);
 app.patch('/ranks/:_id', ranks.edit);
 app.post('/ranks', ranks.create);
 
+var notifications = require('./controllers/notifications');
+
+app.get('/notifications', notifications.list);
+
 var passportraiz=require('./passport.js')(passport);
 
 app.use(passport.initialize());
