@@ -2,6 +2,10 @@ var User = require('../models/user.js'),
     mongoose = require('mongoose');
 
 exports.create = function(req, res) {
+    if (req.body.hasOwnProperty('born') && !req.body.hasOwnProperty('business') && min_born(req.body.born)) {
+        return res.status(403).json({ errors: { born: { kind: 'required', 'message': 'La edad del usuario debe ser mayor a 18 años.' } } });
+    }
+
     new User(req.body).save(function(error, user) {
         if (error) return res.status(403).json(error);
 
@@ -39,4 +43,10 @@ exports.edit = function(req, res) {
 
         return res.status(202).json(user)
     })
+};
+
+var min_born = function(str_date) {
+    var now = new Date(Date.now()), date = new Date(str_date);
+
+    return now.getFullYear() - date.getFullYear() < 18 || now.getMonth() < date.getMonth() || (now.getMonth() === date.getMonth() && now.getDate() <= date.getDate())
 };
