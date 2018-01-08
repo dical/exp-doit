@@ -46,7 +46,7 @@ exports.edit = function(req, res) {
 };
 
 var min_born = function(str_date) {
-    var now = new Date(Date.now()), date = new Date(str_date);
+    var now = new Date(Date.now()), dat = new Date(str_date), dif = now.getFullYear() - dat.getFullYear();
 
-    return now.getFullYear() - date.getFullYear() < 18 || now.getMonth() < date.getMonth() || (now.getMonth() === date.getMonth() && now.getDate() <= date.getDate())
+    return dif < 18 || (dif === 18 && now.getMonth() < dat.getMonth()) || (dif === 18 && now.getMonth() === dat.getMonth() && now.getDate() < dat.getDate())
 };
