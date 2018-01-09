@@ -9,11 +9,15 @@ exports.upload = function(req, res) {
     var image = req.files.image;
     var path = __dirname.split('\\');
 
+    console.log(path);
+
     path.pop();
 
     if (!path) {
         path = ['', 'opt', 'exp-doit']
     }
+
+    console.log(path);
 
     path = path.join('/');
 
