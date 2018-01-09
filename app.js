@@ -10,7 +10,8 @@ var express = require('express')
     , cookiesession = require("cookie-session")
     , config = require('./config')[env]
     , FacebookStrategy = require("passport-facebook").Strategy
-    , User = require("./models/user");
+    , User = require("./models/user")
+    , fileUpload = require('express-fileupload');
 
 mongoose.connect(config.db, { useMongoClient: true });
 
@@ -38,7 +39,7 @@ app.use(
     })
 );
 
-
+app.use(fileUpload());
 
 var users = require('./controllers/users.js');
 
@@ -80,6 +81,9 @@ app.post('/ranks', ranks.create);
 var notifications = require('./controllers/notifications');
 
 app.get('/notifications', notifications.list);
+
+var images = require('./controllers/images');
+app.post('/images', images.upload)
 
 var passportraiz=require('./passport.js')(passport);
 
