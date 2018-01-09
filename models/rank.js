@@ -14,7 +14,10 @@ var rank = new Schema({
         type: Schema.ObjectId,
         ref: 'User'
     },
-    value: Number
+    value: {
+        default: 0,
+        type: Number
+    }
 });
 
 rank.index({ ranker: 1, user: 1 }, { unique: true });

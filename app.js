@@ -44,6 +44,7 @@ var users = require('./controllers/users.js');
 
 app.patch('/users/:id', users.edit);
 app.post('/users', users.create);
+app.post('/recovery', users.recovery);
 app.get('/users/:id', users.search);
 app.get('/users', users.searchMany);
 

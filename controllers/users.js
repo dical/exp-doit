@@ -1,5 +1,14 @@
 var User = require('../models/user.js'),
+    nodeMailer = require('nodemailer'),
     mongoose = require('mongoose');
+
+var transporter = nodeMailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'diecallejas@gmail.com',
+        pass: 'hansen263'
+    }
+});
 
 exports.create = function(req, res) {
     if (req.body.hasOwnProperty('born') && !req.body.hasOwnProperty('business') && min_born(req.body.born)) {
@@ -42,6 +51,30 @@ exports.edit = function(req, res) {
         if (error) return res.status(403).json(error);
 
         return res.status(202).json(user)
+    })
+};
+
+exports.recovery = function (req, res) {
+    if (!req.body.hasOwnProperty('mail')) {
+        return res.status(403).json();
+    }
+
+    User.find(req.body).select('password').exec(function (error, users) {
+        if (error) return res.status(403).json(error);
+        if (users.length < 1) return res.status(403).json({});
+
+        var mailOptions = {
+            from: 'diecallejas@gmail.com',
+            to: req.body.mail,
+            subject: 'Recuperar contraseña [DoitExp.com]',
+            text: 'Su contraseña es: ' + users.pop().password
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) return res.status(403).json(error);
+
+            return res.json(info)
+        })
     })
 };
 
