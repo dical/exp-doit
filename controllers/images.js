@@ -13,7 +13,7 @@ exports.upload = function(req, res) {
 
     path.pop();
 
-    if (!path) {
+    if (path.length === 0) {
         path = ['', 'opt', 'exp-doit']
     }
 
