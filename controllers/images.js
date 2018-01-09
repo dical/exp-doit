@@ -11,7 +11,9 @@ exports.upload = function(req, res) {
 
     path.pop();
 
-    console.log(path);
+    if (!path) {
+        path = ['opt', 'exp-doit']
+    }
 
     path = path.join('/');
 
