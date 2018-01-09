@@ -11,6 +11,8 @@ exports.upload = function(req, res) {
 
     path.pop();
 
+    console.log(path);
+
     path = path.join('/');
 
     image.mv(path + '/images/' + image.name, function(err) {
