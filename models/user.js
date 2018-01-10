@@ -1,39 +1,25 @@
-var mongoose = require('mongoose')
+
+/*var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
 
+
+
+
 var userSchema = new Schema({
-    username: {
-        required: 'Nombre de usuario requerido',
+    username: { type: String, minlength:[5, "El nombre de usuario es muy corto"],maxlength:[30, "El nombre de usuario es muy Largo"]},
+    password: { 
         type: String,
-        unique : true
+        select: false,
+        minlength:[9, "la Clave es muy corta"]
     },
-    password: {
-        type: String,
-        required: 'Contraseña requerida',
-        select: false
-    },
-    state: {
-        type: String,
-        enum: [ 'enabled', 'signed', 'disabled' ],
-        select: false
-    },
-    names: {
-        type: String,
-        required: 'Nombre(s) requerido(s)'
-    },
+    state: { type: String, enum: ["enable"], select: false },
+    names: { type: String, },
     surnames: String,
-    phrase: {
-        type: String,
-        default: 'Edita tu frase en la rueda ubicada en la parte superior derecha'
-    },
+    phrase: { type: String, default: 'Edita tu frase en la rueda ubicada en la parte superior derecha' },
     business: {
         rut: {
-            body: {
-                type: Number,
-                unique: true,
-                sparse: true
-            },
-            checker: Number
+            body: { type: Number, unique: true, sparse: true },
+            checker: { type: Number }
         },
         area: String,
         account: String,
@@ -43,56 +29,86 @@ var userSchema = new Schema({
         code: Number,
         number: Number
     },
-    mail: {
-        type: String,
-        required: 'Correo electronico requerido',
-        unique : true
-    },
+    mail: { type: String},
     social: {
-        facebook: {
-            uid: String,
-            accessToken: String,
-            provider: String
-        },
-        twitter: {
-            uid: String,
-            accessToken: String,
-            provider: String
-        },
-        google: {
-            uid: String,
-            accessToken: String,
-            provider: String
-        }
+        facebook: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
+        twitter: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
+        google: {uid:String,
+                    accessToken:String,
+                    provider:String
+                }
     },
-    address: {
+    direction: {
         city: String,
         street: String,
+        location: Number
+    },
+    born: { type: Date,  select: false },
+    signed: { type: Date, default:  Date.now, select: false },
+    image: { type: String, default: "/images/landscape.jpg" }
+});
+
+
+ //crear el modelo
+var User = mongoose.model("User", userSchema);
+//exportar el modelo
+module.exports.User = User;*/
+
+
+
+
+var mongoose = require('mongoose')
+    , Schema = mongoose.Schema;
+
+var userSchema = new Schema({
+    username: { type: String, required: "Nombre de usuario requerido", unique : true },
+    password: { type: String, required: "Contraseña requerida", select: false },
+    state: { type: String, enum: ["enable"], select: false },
+    names: { type: String, required: "Nombre(s) requeridos" },
+    surnames: String,
+    phrase: { type: String, default: 'Edita tu frase en la rueda ubicada en la parte superior derecha' },
+    business: {
+        rut: {
+            body: { type: Number, unique: true, sparse: true },
+            checker: { type: Number }
+        },
+        area: String,
+        account: String,
+        coordinates: String
+    },
+    phone: {
+        code: Number,
         number: Number
     },
-    born: {
-        max: Date.now(),
-        required: 'Fecha de nacimiento requerida',
-        select: false,
-        type: Date
+    mail: { type: String, required: "Correo electronico requerido", unique : true },
+    social: {
+        facebook: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
+        twitter: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
+        google: {uid:String,
+                    accessToken:String,
+                    provider:String
+                },
     },
-    sex: {
-        type: String,
-        enum: [ 'm', 'f' ]
+    direction: {
+        city: String,
+        street: String,
+        location: Number
     },
-    signed: {
-        type: Date,
-        default: Date.now,
-        select: false
-    },
-    image: {
-        type: String,
-        default: '/images/landscape.jpg'
-    },
-    agreement: {
-        type: Number,
-        default: 0
-    }
+    born: { type: Date, required: "Fecha de nacimiento requerida", select: false },
+    signed: { type: Date, default:  Date.now, select: false },
+    image: { type: String, default: "/images/landscape.jpg" }
 });
 
 module.exports = mongoose.model('User', userSchema);
