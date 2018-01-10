@@ -4,7 +4,7 @@ module.exports = {
   },
  facebook:{
  	id:'562027577507254',
-	secret:'6a15252109183378f003a052c44ce875'
+	secret:'e3224b205918e066f14389ee33b68ab3'
  },
  twitter:{
  	key : 'dLsTHj8zqnRP5asM80EAc7FMd',
