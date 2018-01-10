@@ -103,7 +103,8 @@ app.get('/auth/facebook', // para donde lo manda ?? authenticate ?? a la estrate
 app.get('/auth/facebook/callback', 
 	passport.authenticate('facebook',{failureRedirect: '/'}),
 	function(req,res){
-		res.redirect('http://localhost:3000/user/'); // cuando funciona lo redirecciona en esta parte
+        console.log(req.session.passport.user._id)
+		res.redirect('http://localhost:3000/:id*'); // cuando funciona lo redirecciona en esta parte
         //res.status(200).json({'prueb':'prueba'});
 });
 
