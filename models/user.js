@@ -41,10 +41,7 @@ var userSchema = new Schema({
                 },
     },
     direction: {
-        city:{
-            id:String,
-            name:String
-        },
+        city:String,
         street: String,
         location: Number
     },
