@@ -47,7 +47,9 @@ exports.edit = function(req, res) {
 
 exports.list = function (req, res) {
     var sort = { start: 'desc' },
-        find = { };
+        find = { },
+        skip = 0,
+        cont = 10;
 
     if (req.query.hasOwnProperty('filter') && req.query.filter === 'soon') {
         sort = { start: 'desc' }
@@ -61,11 +63,23 @@ exports.list = function (req, res) {
         sort = { start: 'desc' }
     }
 
+    if (req.query.hasOwnProperty('filter') && req.query.filter === 'me' && req.query.hasOwnProperty("user")) {
+        find = { own: new mongoose.Types.ObjectId(req.query.user) }
+    }
+
+    if (req.query.hasOwnProperty("skip")) {
+        skip = Number(req.query.skip)
+    }
+
+    if (req.query.hasOwnProperty("cont")) {
+        cont = req.query.cont
+    }
+
     if (req.query.hasOwnProperty('search')) {
         find['name'] = new RegExp("" + req.query.search + "", "i");
     }
 
-    Event.find(find).sort(sort).exec(function (error, events) {
+    Event.find(find).sort(sort).skip(skip).limit(cont).exec(function (error, events) {
         if (error) return res.status(403).json(error);
 
         return res.json(events)
