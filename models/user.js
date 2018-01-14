@@ -1,9 +1,5 @@
-
 var mongoose = require('mongoose')
     , Schema = mongoose.Schema;
-
-
-
 
 var userSchema = new Schema({
     username: { type: String, required: "Nombre de usuario requerido", unique : true },
@@ -50,8 +46,4 @@ var userSchema = new Schema({
     image: { type: String, default: "/images/landscape.jpg" }
 });
 
-
- //crear el modelo
-var User = mongoose.model("User", userSchema);
-//exportar el modelo
-module.exports.User = User;
+module.exports = mongoose.model("User", userSchema);
