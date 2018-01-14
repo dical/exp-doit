@@ -93,17 +93,17 @@ app.use(passport.session());
 //Flujo de autenticacion CON FACEBOOK
 //esto inicia el flujo de autenticacion y redirige a facebook
 app.get('/auth/facebook', // para donde lo manda ?? authenticate ?? a la estrategia
-    passport.authenticate('facebook',{ authType:'rerequest', scope: ['publish_pages','public_profile','email'] }) // yo creo que aqui falta algo cuando tu mandas la peticion y que te devuelva algo en algun parametros por que te manda un html entero mira aca tengo uno que funca 
-    //function(req,res){
-    //  console.log(req)
-    //}
-);
+    passport.authenticate('facebook',{ authType:'rerequest', scope: ['publish_pages','public_profile','email','user_birthday','user_location'] }),  
+    function(req,res){
+      res.status(201).json({});
+    });
+
     //passport.authenticate('facebook',{ }));
 	//2. recibir la respuesta de facebook
 app.get('/auth/facebook/callback', 
 	passport.authenticate('facebook',{failureRedirect: '/'}),
 	function(req,res){
-		res.redirect('http://localhost:3000/user/'); // cuando funciona lo redirecciona en esta parte
+        res.redirect('http://localhost:3000/user/'+req.session.passport.user._id);
         //res.status(200).json({'prueb':'prueba'});
 });
 
