@@ -20,7 +20,13 @@ exports.create = function(req, res) {
 };
 
 exports.list = function (req, res) {
-    Inscription.find(req.query).populate('user event').exec(function (error, inscriptions) {
+    var skip = 0;
+
+    if (req.query.hasOwnProperty("skip")) {
+        skip = Number(req.query.skip); delete req.query.skip
+    }
+
+    Inscription.find(req.query).skip(skip).populate('user event').exec(function (error, inscriptions) {
         if (error) return res.status(403).json(error);
 
         return res.json(inscriptions)
