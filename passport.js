@@ -1,7 +1,7 @@
 var TwitterStrategy = require('passport-twitter').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
     GoogleStrategy =require('passport-google-oauth').OAuth2Strategy,
-    User = require('./models/user.js').User,
+    User = require('./models/user.js'),
     config = require("./config.js");
 
 
@@ -15,7 +15,7 @@ module.exports = function(passport) {
          clientID: config.facebook.id,
          clientSecret:config.facebook.secret,
          callbackURL:'http://localhost:8081/auth/facebook/callback',
-         profileFields: ['id', 'displayName', 'photos','birthday', 'email', 'name', 'locale','location','hometown'],
+         profileFields: ['id', 'displayName', 'photos','birthday', 'email', 'name'],
          passReqToCallback: false
     },function(accessToken, refreshToken, profile, cb){
             //guardar en la bd
@@ -28,7 +28,7 @@ module.exports = function(passport) {
             convertDateFormat(fecha);
             function convertDateFormat(string) {
                 var fechaDato = string.split('/');
-                return fechaDato[2] + '-' + fechaDato[1] + '-' + fechaDato[0];
+                return fechaDato[2] + '-' + fechaDato[0] + '-' + fechaDato[1];
             };
             var number=profile._json.id;
             function random(number){
@@ -37,9 +37,25 @@ module.exports = function(passport) {
                 
             };
             
-        User.findOne({social:{facebook:{uid:profile.id}},social:{facebook:{provider:profile.provider}}}, function(err,user){
-                if(err){throw(err);
+        User.findOne(
+            {
+                social:
+                {
+                    facebook:
+                    {
+                        uid:profile.id
+                    }
+                },
+                social:
+                {
+                    facebook:
+                    {
+                        provider:profile.provider
+                    }
                 }
+            }, function(err,user){
+                if(err)throw(err);
+                
 
                 if(!err && user!= null){ 
                     return cb(null, user)
@@ -48,10 +64,9 @@ module.exports = function(passport) {
                 var user= new User();
                     user.username=profile.name.familyName+''+random(number.substring(0, 4));
                     user.names=profile.name.givenName + ' ' + profile.name.familyName;
-                    user.password='doitexp12345';
+                    user.password='doitexp'+''+random(number.substring(2, 7));
                     user.surnames=profile.name.familyName;
                     user.phrase='Edita tu frase en la rueda ubicada en la parte superior derecha';
-                   
                     user.mail=profile.emails[0].value;
                    
                     user.social={
@@ -81,7 +96,7 @@ module.exports = function(passport) {
             user.save(function(err) {
                 if(err) throw err;
                 done(null, user);
-                //console.log(user._id);
+                
             });
         done(null, user);
 
