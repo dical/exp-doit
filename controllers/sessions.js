@@ -13,7 +13,7 @@ exports.create = function(req, res) {
     User.findOne(req.body, function(error, user) {
         if (error) return res.status(403).json(error);
         if (!user) return res.status(403).json({ errors: { data: { message: 'Datos incorrectos' } } });
-        if (user.hasOwnProperty("state") && user.state === "disabled") return res.status(403).json({ errors: { data: { message: "Usuario deshabilitado" } } });
+        if (user.state.toString() === "disabled") return res.status(403).json({ errors: { data: { message: "Usuario deshabilitado" } } });
 
         return res.status(201).json(user)
     });
