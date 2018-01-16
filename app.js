@@ -93,7 +93,7 @@ app.use(passport.session());
 //Flujo de autenticacion CON FACEBOOK
 //esto inicia el flujo de autenticacion y redirige a facebook
 app.get('/auth/facebook', // para donde lo manda ?? authenticate ?? a la estrategia
-    passport.authenticate('facebook',{ authType:'rerequest', scope: ['publish_pages','public_profile','email','user_birthday'] }),  
+    passport.authenticate('facebook',{ authType:'rerequest', scope: ['publish_pages','public_profile','email','user_birthday'] })  
 //    function(req,res){
 //    }
 );
