@@ -18,6 +18,7 @@ mongoose.connect(config.db, { useMongoClient: true });
 app.use(bodyParser.json());
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(cors());
+app.options('*', cors());
 
 app.use(
     cookiesession({
@@ -90,21 +91,21 @@ var passportraiz=require('./passport.js')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-//Flujo de autenticacion CON FACEBOOK
-//esto inicia el flujo de autenticacion y redirige a facebook
-app.get('/auth/facebook', // para donde lo manda ?? authenticate ?? a la estrategia
+
+app.get('/auth/facebook', 
     passport.authenticate('facebook',{ authType:'rerequest', scope: ['publish_pages','public_profile','email','user_birthday'] })  
 //    function(req,res){
 //    }
 );
 
-    //passport.authenticate('facebook',{ }));
-	//2. recibir la respuesta de facebook
 app.get('/auth/facebook/callback', 
 	passport.authenticate('facebook',{failureRedirect: '/'}),
 	function(req,res){
+        //console.log(process.env.hostname);
+        //res.status(201).json(user)
         res.redirect('http://localhost:3000/user/'+req.session.passport.user._id);
-        res.json(user);
+
+
 });
 
 
